@@ -25,10 +25,17 @@ def main(args):
 	
 	try:
 		# Pass input through verbatim for now.
-		print(source_file.read())
+		print(parse(source_file))
 	finally:
 		if source_file != sys.stdin:
 			source_file.close()
+
+def parse(stream):
+	out = ''
+	for line in stream:
+		if len(line) == 0 or line[0] != '#':
+			out += line
+	return out
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
