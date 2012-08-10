@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+
+"""GuanoDoc: the batshit insane document system"""
+
+import sys
+from argparse import ArgumentParser
+
+def main(args):
+	parser = ArgumentParser(
+		prog='guano',
+		description="The batshit insane document system."
+	)
+	parser.add_argument(
+		'source',
+		metavar='SOURCE',
+		help='document source file'
+	)
+	args = parser.parse_args(args)
+	
+	# Read from file or stdin if '-' specified.
+	if (args.source == '-'):
+		source_file = sys.stdin
+	else:
+		source_file = open(args.source)
+	
+	try:
+		# Pass input through verbatim for now.
+		print(source_file.read())
+	finally:
+		if source_file != sys.stdin:
+			source_file.close()
+
+if __name__ == '__main__':
+	sys.exit(main(sys.argv[1:]))
