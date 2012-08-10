@@ -4,6 +4,7 @@
 
 import sys
 from argparse import ArgumentParser
+import re
 
 def main(args):
 	parser = ArgumentParser(
@@ -25,17 +26,31 @@ def main(args):
 	
 	try:
 		# Pass input through verbatim for now.
-		print(parse(source_file))
+		parse(source_file, sys.stdout)
 	finally:
 		if source_file != sys.stdin:
 			source_file.close()
 
-def parse(stream):
-	out = ''
+def parse(stream, out):
 	for line in stream:
-		if len(line) == 0 or line[0] != '#':
-			out += line
-	return out
+		if re.match('#.*', line):
+			# Ignore comment.
+			continue
+		match = re.match('@parser (\w+)', line)
+		if match:
+			parser_name = match.group(1)
+			globals()[parser_name](stream, out)
+			continue
+		# Pass everything else through verbatim.
+		out.writelines(line)
+
+# Sample alternative parser.
+def block_quoter(stream, out):
+	for line in stream:
+		if line == '<\n':
+			return
+		else:
+			out.writelines("> " + line)
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
