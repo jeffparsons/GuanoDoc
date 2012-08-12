@@ -4,20 +4,19 @@
 
 import sys
 from argparse import ArgumentParser
-import re
-from heredoc import HeredocStream
+import parsers
 
 def main(args):
-	parser = ArgumentParser(
+	arg_parser = ArgumentParser(
 		prog='guano',
 		description="The batshit insane document system."
 	)
-	parser.add_argument(
+	arg_parser.add_argument(
 		'source',
 		metavar='SOURCE',
 		help='document source file'
 	)
-	args = parser.parse_args(args)
+	args = arg_parser.parse_args(args)
 	
 	# Read from file or stdin if '-' specified.
 	if (args.source == '-'):
@@ -26,43 +25,11 @@ def main(args):
 		source_file = open(args.source)
 	
 	try:
-		# Pass input through verbatim for now.
-		parse(source_file, sys.stdout)
+		# This may delegate to other specialised parsers.
+		parsers.parse(source_file, sys.stdout)
 	finally:
 		if source_file != sys.stdin:
 			source_file.close()
-
-def parse(stream, out):
-	for line in stream:
-		if re.match('#.*', line):
-			# Ignore comment.
-			continue
-		match = re.match('@parser (\w+)$', line)
-		if match:
-			parser_name = match.group(1)
-			globals()[parser_name](stream, out)
-			continue
-		match = re.match('@parser (\w+) until (.*)$', line)
-		if match:
-			parser_name = match.group(1)
-			delimiter = match.group(2)
-			heredoc = HeredocStream(stream, delimiter)
-			globals()[parser_name](heredoc, out)
-			continue
-		# Pass everything else through verbatim.
-		out.writelines(line)
-
-# Sample alternative parser.
-def block_quoter(stream, out):
-	for line in stream:
-		if line == '<\n':
-			return
-		else:
-			out.writelines("> " + line)
-
-def dumb_block_quoter(stream, out):
-	for line in stream:
-		out.writelines("> " + line)
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
