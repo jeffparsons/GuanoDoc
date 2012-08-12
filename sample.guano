@@ -14,3 +14,15 @@ and prefixed with the '>' character
 <
 
 Now we're back to normal.
+
+This time our alternative parser won't have
+its own escape command. Instead we're going
+to choose what input to feed it.
+
+@parser dumb_block_quoter until the fat lady sings
+These lines will be indented, too, but dumb_block_quoter
+isn't responsible for returning control; it is only fed
+a substring of the input.
+the fat lady sings
+
+Now we're back to normal again.

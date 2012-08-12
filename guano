@@ -5,6 +5,7 @@
 import sys
 from argparse import ArgumentParser
 import re
+from heredoc import HeredocStream
 
 def main(args):
 	parser = ArgumentParser(
@@ -36,10 +37,17 @@ def parse(stream, out):
 		if re.match('#.*', line):
 			# Ignore comment.
 			continue
-		match = re.match('@parser (\w+)', line)
+		match = re.match('@parser (\w+)$', line)
 		if match:
 			parser_name = match.group(1)
 			globals()[parser_name](stream, out)
+			continue
+		match = re.match('@parser (\w+) until (.*)$', line)
+		if match:
+			parser_name = match.group(1)
+			delimiter = match.group(2)
+			heredoc = HeredocStream(stream, delimiter)
+			globals()[parser_name](heredoc, out)
 			continue
 		# Pass everything else through verbatim.
 		out.writelines(line)
@@ -51,6 +59,10 @@ def block_quoter(stream, out):
 			return
 		else:
 			out.writelines("> " + line)
+
+def dumb_block_quoter(stream, out):
+	for line in stream:
+		out.writelines("> " + line)
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
