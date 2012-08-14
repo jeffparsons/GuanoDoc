@@ -9,3 +9,8 @@ class HeredocStream:
 				raise StopIteration
 			else:
 				yield line
+	
+	def readlines(self):
+		# Because we're reading line-by-line
+		# we can get away with this for now.
+		return self

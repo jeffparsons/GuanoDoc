@@ -26,3 +26,13 @@ a substring of the input.
 the fat lady sings
 
 Now we're back to normal again.
+
+@parser markdown until I feel like it
+This section should become HTML
+===============================
+
+That's because it's getting fed through a Markdown parser.
+Isn't that exciting?
+I feel like it
+
+Aaaaand we're back to normal again.

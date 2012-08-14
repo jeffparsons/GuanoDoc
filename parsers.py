@@ -32,3 +32,9 @@ def block_quoter(stream, out):
 def dumb_block_quoter(stream, out):
 	for line in stream:
 		out.writelines("> " + line)
+
+def markdown(stream, out):
+	md_source = ''.join(stream.readlines())
+	import markdown
+	html = markdown.markdown(md_source)
+	out.write(html)
