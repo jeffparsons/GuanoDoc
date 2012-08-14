@@ -11,7 +11,7 @@ def parse(stream, out):
 			parser_name = match.group(1)
 			globals()[parser_name](stream, out)
 			continue
-		match = re.match('@parser (\w+) until (.*)$', line)
+		match = re.match('@parser (\w+) until (.+)$', line)
 		if match:
 			parser_name = match.group(1)
 			delimiter = match.group(2)
