@@ -1,7 +1,7 @@
 import re
 from heredoc import HeredocStream
 
-def parse(stream, out):
+def parse(parent, stream, out):
 	for line in stream:
 		if re.match('#.*', line):
 			# Ignore comment.
@@ -9,32 +9,37 @@ def parse(stream, out):
 		match = re.match('@parser (\w+)$', line)
 		if match:
 			parser_name = match.group(1)
-			globals()[parser_name](stream, out)
+			globals()[parser_name](parse, stream, out)
 			continue
 		match = re.match('@parser (\w+) until (.+)$', line)
 		if match:
 			parser_name = match.group(1)
 			delimiter = match.group(2)
 			heredoc = HeredocStream(stream, delimiter)
-			globals()[parser_name](heredoc, out)
+			globals()[parser_name](parse, heredoc, out)
 			continue
 		# Pass everything else through verbatim.
 		out.writelines(line)
 
 # Sample alternative parser.
-def block_quoter(stream, out):
+def block_quoter(parent, stream, out):
 	for line in stream:
 		if line == '<\n':
 			return
 		else:
 			out.writelines("> " + line)
 
-def dumb_block_quoter(stream, out):
+def dumb_block_quoter(parent, stream, out):
 	for line in stream:
 		out.writelines("> " + line)
 
-def markdown(stream, out):
+def markdown(parent, stream, out):
 	md_source = ''.join(stream.readlines())
 	import markdown
-	html = markdown.markdown(md_source)
+	html = markdown.markdown(md_source, output_format='html5')
 	out.write(html)
+
+def html_doc(parent, stream, out):
+	out.writelines('<!DOCTYPE html><html><body>\n')
+	parent(html_doc, stream, out)
+	out.writelines('</body></html>\n')

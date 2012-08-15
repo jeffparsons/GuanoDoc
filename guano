@@ -26,7 +26,7 @@ def main(args):
 	
 	try:
 		# This may delegate to other specialised parsers.
-		parsers.parse(source_file, sys.stdout)
+		parsers.parse(None, source_file, sys.stdout)
 	finally:
 		if source_file != sys.stdin:
 			source_file.close()

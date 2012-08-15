@@ -1,3 +1,4 @@
+@parser html_doc
 This is a sample GuanoDoc document.
 
 # This is a comment and should not affect the output in any way.
