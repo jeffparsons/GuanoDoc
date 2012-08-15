@@ -57,3 +57,9 @@ def duck_hunter(parent, stream, out):
 			else:
 				yield line
 	parent(duck_hunter, duck_hunter_stream(), out)
+
+def duck_breeder(parent, stream, out):
+	def duck_breeder_filter():
+		for line in stream:
+			yield line.replace('{duckling}', '{duck}')
+	parent(duck_breeder, duck_breeder_filter(), out)

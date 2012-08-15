@@ -1,4 +1,5 @@
 @parser html_doc
+@parser duck_breeder
 @parser duck_hunter
 This is a sample GuanoDoc document.
 
@@ -42,4 +43,12 @@ Aaaaand we're back to normal again.
 But in case that's too normal for you, here's a duck:
 <pre>
 {duck}
+</pre>
+
+These say <em>duckling</em> in the source, but a filter
+intercepts them and turns them into ducks:
+<pre>
+{duckling}
+QUACK!
+{duckling}
 </pre>
