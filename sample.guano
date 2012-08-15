@@ -1,6 +1,7 @@
 @parser html_doc
 @parser duck_breeder
 @parser duck_hunter
+@parser htmlify_inline_code
 This is a sample GuanoDoc document.
 
 # This is a comment and should not affect the output in any way.
@@ -45,7 +46,7 @@ But in case that's too normal for you, here's a duck:
 {duck}
 </pre>
 
-These say <em>duckling</em> in the source, but a filter
+These say <em>duckling</em> (not <em>duck</em>) in the source, but a filter
 intercepts them and turns them into ducks:
 <pre>
 {duckling}

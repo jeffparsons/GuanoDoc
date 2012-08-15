@@ -49,10 +49,10 @@ def duck_hunter(parent, stream, out):
 		for line in stream:
 			if line == '{duck}\n':
 				yield """
-					    _
-					  >(o)__
-					   (_~_/
-					~~~~~~~~~~
+					   _
+					 >(o)__
+					  (_~_/
+					~~~~~~~~~
 					"""[1:].replace('\t', '')
 			else:
 				yield line
@@ -63,3 +63,9 @@ def duck_breeder(parent, stream, out):
 		for line in stream:
 			yield line.replace('{duckling}', '{duck}')
 	parent(duck_breeder, duck_breeder_filter(), out)
+
+def htmlify_inline_code(parent, stream, out):
+	def htmlify_inline_code_stream():
+		for line in stream:
+			yield re.sub('`(.+?)\'', '<tt>\\1</tt>', line)
+	parent(htmlify_inline_code, htmlify_inline_code_stream(), out)
