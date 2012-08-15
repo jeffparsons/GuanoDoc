@@ -1,4 +1,5 @@
 @parser html_doc
+@parser duck_hunter
 This is a sample GuanoDoc document.
 
 # This is a comment and should not affect the output in any way.
@@ -37,3 +38,8 @@ Isn't that exciting?
 I feel like it
 
 Aaaaand we're back to normal again.
+
+But in case that's too normal for you, here's a duck:
+<pre>
+{duck}
+</pre>

@@ -43,3 +43,17 @@ def html_doc(parent, stream, out):
 	out.writelines('<!DOCTYPE html><html><body>\n')
 	parent(html_doc, stream, out)
 	out.writelines('</body></html>\n')
+
+def duck_hunter(parent, stream, out):
+	def duck_hunter_stream():
+		for line in stream:
+			if line == '{duck}\n':
+				yield """
+					    _
+					  >(o)__
+					   (_~_/
+					~~~~~~~~~~
+					"""[1:].replace('\t', '')
+			else:
+				yield line
+	parent(duck_hunter, duck_hunter_stream(), out)
