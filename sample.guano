@@ -53,3 +53,12 @@ intercepts them and turns them into ducks:
 QUACK!
 {duckling}
 </pre>
+
+Here's some code:
+@{
+print('Hello!')
+a=4
+if a == 4:
+	print(a)
+}
+And the code is done.

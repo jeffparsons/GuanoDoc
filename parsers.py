@@ -1,3 +1,4 @@
+import sys
 import re
 from heredoc import HeredocStream
 
@@ -17,6 +18,12 @@ def parse(parent, stream, out):
 			delimiter = match.group(2)
 			heredoc = HeredocStream(stream, delimiter)
 			globals()[parser_name](parse, heredoc, out)
+			continue
+		match = re.match('@{', line)
+		if match:
+			# Execute block of user code.
+			heredoc = HeredocStream(stream, '}')
+			python_block(parse, heredoc, out)
 			continue
 		# Pass everything else through verbatim.
 		out.writelines(line)
@@ -69,3 +76,12 @@ def htmlify_inline_code(parent, stream, out):
 		for line in stream:
 			yield re.sub('`(.+?)\'', '<tt>\\1</tt>', line)
 	parent(htmlify_inline_code, htmlify_inline_code_stream(), out)
+
+def python_block(parent, stream, out):
+	python_source = ''.join(stream.readlines())
+	try:
+		ast = compile(python_source, '<string>', 'exec')
+		exec(ast)
+	except:
+		out.writelines('Error in Python block:\n')
+		out.writelines(str(sys.exc_info()[0]))
