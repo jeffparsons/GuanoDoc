@@ -1,6 +1,7 @@
 @parser html_doc
 @parser duck_breeder
 @parser duck_hunter
+@parser image_embed
 @parser htmlify_inline_code
 This is a sample GuanoDoc document.
 
@@ -53,6 +54,9 @@ intercepts them and turns them into ducks:
 QUACK!
 {duckling}
 </pre>
+
+Here's an embedded HTML image!
+{img:sample_image.jpg}
 
 Here's some code:
 @{
